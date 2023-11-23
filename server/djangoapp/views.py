@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
+from .models import CarModel
+from .models import CarMake
 # from .restapis import related methods
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -10,75 +12,71 @@ from datetime import datetime
 import logging
 import json
 
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
 # Create your views here.
 
-# Create an `about` view to render a static about page
+# Render the about page
 def about(request):
+    """Render a static about page."""
     return render(request, 'djangoapp/about.html')
 
-
-# Create a `contact` view to return a static contact page
+# Render the contact page
 def contact(request):
+    """Return a static contact page."""
     return render(request, 'djangoapp/contact.html')
 
-# Create a `login_request` view to handle sign in request
+# Handle sign in request
 def login_request(request):
-    context = {}
-    if request.method == "GET":
-        return render(request, 'djangoapp/login.html', context)
+    """Process the sign in request."""
     if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['psw']
-        user = authenticate(username=username, password=password)
-        if user is not None:
+        username = request.POST.get('username')
+        password = request.POST.get('psw')
+        user = authenticate(request, username=username, password=password)
+        if user:
             login(request, user)
             return redirect('djangoapp:index')
         else:
-            context['message'] = "Invalid username or password."
-            return render(request, 'djangoapp/login.html', context)
-    else:
-        return render(request, 'djangoapp/login.html', context)
+            # Using `messages` to pass errors to templates
+            messages.error(request, "Invalid username or password.")
+    # GET and other methods will fall to this return statement
+    return render(request, 'djangoapp/login.html')
 
-# Create a `logout_request` view to handle sign out request
+# Handle sign out request
 def logout_request(request):
+    """Process the sign out request."""
     logout(request)
     return redirect('djangoapp:index')
 
-# Create a `registration_request` view to handle sign up request
+# Handle sign up request
 def registration_request(request):
-    context = {}
-    if request.method == 'GET':
-        return render(request, 'djangoapp/registration.html', context)
-    elif request.method == 'POST':
-        # Check if user exists
-        username = request.POST['username']
-        password = request.POST['psw']
-        first_name = request.POST['firstname']
-        last_name = request.POST['lastname']
-        user_exist = False
-        try:
-            User.objects.get(username=username)
-            user_exist = True
-        except:
-            logger.error("New user")
-        if not user_exist:
-            user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name,
-                                            password=password)
+    """Process the sign up request."""
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('psw')
+        first_name = request.POST.get('firstname')
+        last_name = request.POST.get('lastname')
+        # Check if user exists using Django's built-in method
+        if not User.objects.filter(username=username).exists():
+            User.objects.create_user(username=username, first_name=first_name, last_name=last_name, password=password)
+            # Log the user in and redirect to index page
+            user = authenticate(request, username=username, password=password)
             login(request, user)
-            return redirect("djangoapp:index")
+            return redirect('djangoapp:index')
         else:
-            context['message'] = "User already exists."
-            return render(request, 'djangoapp/registration.html', context)
+            messages.error(request, "User already exists.")
+    # GET and other methods will fall to this return statement
+    return render(request, 'djangoapp/registration.html')
 
-# Update the `get_dealerships` view to render the index page with a list of dealerships
+# Render the index page with a list of dealerships
 def get_dealerships(request):
-    context = {}
-    if request.method == "GET":
-        return render(request, 'djangoapp/index.html', context)
+    """Render the index page with a list of dealerships."""
+    # Add code to fetch dealerships and pass to the context
+    # context['dealerships'] = fetch_dealerships()
+    return render(request, 'djangoapp/index.html')
 
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
