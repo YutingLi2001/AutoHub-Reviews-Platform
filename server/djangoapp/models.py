@@ -1,76 +1,118 @@
 from django.db import models
 from django.utils.timezone import now
+from django.core import serializers
+import uuid
+import json
 
+# Car Make model
 class CarMake(models.Model):
-    """
-    Car Make represents a brand or manufacturer of cars.
-    """
-    name = models.CharField(max_length=50, blank=False)
-    description = models.TextField(max_length=1000, blank=True)
+    name = models.CharField(null=False, max_length=100, default='Make')
+    description = models.CharField(max_length=500)
 
     def __str__(self):
-        return "Name: {}, Description: {}".format(self.name, self.description)
+        return "Name: " + self.name
 
+# Car Model model
 class CarModel(models.Model):
-    """
-    Car Model represents a specific model of car, which is made by a Car Make.
-    """
-    SEDAN = 'sedan'
-    SUV = 'suv'
-    WAGON = 'wagon'
+    make = models.ForeignKey(CarMake, null=False, on_delete=models.CASCADE)
+    # - Many-To-One relationship to Car Make model (One Car Make has many Car Models, using ForeignKey field)
+    name = models.CharField(null=False, max_length=40, default='undefined')
+    # - Name
+    id = models.IntegerField(default=1, primary_key=True)      
+    # - Dealer id, used to refer a dealer created in cloudant database
+    
+    COUPE = 'Coupe'
+    MINIVAN = 'Minivan'
+    SEDAN = 'Sedan'
+    SUV = 'SUV'
+    TRUCK = 'Truck'
+    WAGON = 'Wagon'
     CAR_TYPES = [
+        (COUPE, 'Coupe'),
+        (MINIVAN, 'Minivan'),
         (SEDAN, 'Sedan'),
         (SUV, 'SUV'),
+        (TRUCK, 'Truck'),
         (WAGON, 'Wagon'),
     ]
 
-    make = models.ForeignKey(CarMake, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50, blank=False)
-    dealer_id = models.IntegerField()
-    car_type = models.CharField(max_length=50, choices=CAR_TYPES)
-    year = models.DateField()
+    type = models.CharField(
+        null=False,
+        max_length=50,
+        choices=CAR_TYPES,
+        default=SEDAN
+    )
+        
+    year = models.IntegerField(default=now().year)
 
     def __str__(self):
-        return "Name: {}, Dealer ID: {}, Type: {}, Year: {}".format(
-            self.name, self.dealer_id, self.car_type, self.year.year)
+        return "Name: " + self.name
 
-# Consider converting these to Django models if they need to be stored in the database.
+# Get dealer data
 class CarDealer:
-    """
-    Car Dealer represents a car dealership, including its location and contact info.
-    """
-    # Initialization method with attributes defined
-    def __init__(self, address, city, full_name, id, lat, long, short_name, st, zip):
-        # Attributes with simple comments
-        self.address = address
-        self.city = city
+
+    def __init__(self, address, city, id, lat, long, st, zip, full_name):
+        # Dealer name
         self.full_name = full_name
+        
+        # Dealer address
+        self.address = address
+        # Dealer city
+        self.city = city
+       
+        # Dealer id
         self.id = id
+        # Location lat
         self.lat = lat
+        # Location long
         self.long = long
-        self.short_name = short_name
+
+        # Dealer state
         self.st = st
+        # Dealer zip
         self.zip = zip
 
     def __str__(self):
-        return "Dealer name: {}".format(self.full_name)
+        return "Dealer Name: " + self.full_name
 
+# Get review data
 class DealerReview:
-    """
-    Dealer Review represents a customer's review of a car dealership.
-    """
-    # Initialization method with attributes defined
-    def __init__(self, dealership, name, purchase, review, purchase_date, car_make, car_model, car_year, sentiment, id):
+
+    def __init__(self, dealership, name, purchase, review):
+        # Required attributes
         self.dealership = dealership
         self.name = name
         self.purchase = purchase
         self.review = review
-        self.purchase_date = purchase_date
-        self.car_make = car_make
-        self.car_model = car_model
-        self.car_year = car_year
-        self.sentiment = sentiment # Presumed to be provided by Watson NLU service
-        self.id = id
+        # Optional attributes
+        self.purchase_date = ""
+        self.purchase_make = ""
+        self.purchase_model = ""
+        self.purchase_year = ""
+        self.sentiment = ""
+        self.id = ""
 
     def __str__(self):
-        return "Review: {}, Sentiment: {}".format(self.review, self.sentiment)
+        return "Review: " + self.review
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                            sort_keys=True, indent=4)
+
+# Post review data
+class ReviewPost:
+
+    def __init__(self, dealership, name, purchase, review):
+        self.dealership = dealership
+        self.name = name
+        self.purchase = purchase
+        self.review = review
+        self.purchase_date = ""
+        self.car_make = ""
+        self.car_model = ""
+        self.car_year = ""
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                            sort_keys=True, indent=4)
+                            
