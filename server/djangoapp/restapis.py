@@ -48,25 +48,42 @@ def post_request(url, payload, **kwargs):
 def get_dealers_from_cf(url, **kwargs):
     results = []
     state = kwargs.get("state")
-    if state:
-        json_result = get_request(url, state=state)
-    else:
-        json_result = get_request(url)
+    # Perform a GET request with or without the state parameter
+    json_result = get_request(url, state=state) if state else get_request(url)
 
     if json_result:
-        # Get the row list in JSON as dealers
-        dealers = json_result
-        # For each dealer object
-        for dealer in dealers:
-            # Get its content in `doc` object
-            dealer_doc = dealer["doc"]
-            # Create a CarDealer object with values in `doc` object
-            dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"], full_name=dealer_doc["full_name"],
-                                   id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
-                                   st=dealer_doc["st"], zip=dealer_doc["zip"])
-            results.append(dealer_obj)
+        # Iterate over the returned dealers data
+        for dealer in json_result:
+            # Safely get the 'doc' key value
+            dealer_doc = dealer.get("doc")
+            if dealer_doc:
+                # Proceed only if 'doc' is present
+                try:
+                    # Initialize a CarDealer object with values from 'doc'
+                    dealer_obj = CarDealer(
+                        address=dealer_doc.get("address", ""),
+                        city=dealer_doc.get("city", ""),
+                        full_name=dealer_doc.get("full_name", ""),
+                        id=dealer_doc.get("id", 0),  # Assuming 'id' should be present, default to 0 if not found
+                        lat=dealer_doc.get("lat", 0.0),
+                        long=dealer_doc.get("long", 0.0),
+                        st=dealer_doc.get("st", ""),
+                        zip=dealer_doc.get("zip", "")
+                    )
+                    # Add the CarDealer object to the results list
+                    results.append(dealer_obj)
+                except KeyError as e:
+                    # Handle specific missing key if necessary
+                    print(f"Missing key in dealer data: {e}")
+                except Exception as e:
+                    # General exception catch, if needed (log or handle the unexpected error)
+                    print(f"An error occurred: {e}")
+            else:
+                # Log or handle cases where 'doc' is not found
+                print(f"'doc' key not found in dealer data: {dealer}")
 
     return results
+
 
 
 def get_dealer_by_id_from_cf(url, id):
@@ -114,15 +131,34 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 
     return results
 
-
 def analyze_review_sentiments(text):
+    # IBM Watson NLU service credentials
     url = "https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/39e30a1e-daa0-43f9-baee-a2a9eab7d505"
     api_key = "lbhukj5iEH9QDmXoMTQWFJqlOs4X-i3_NPC9R_7XNsw2"
+    
+    # Setup the authenticator
     authenticator = IAMAuthenticator(api_key)
-    natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
+    natural_language_understanding = NaturalLanguageUnderstandingV1(
+        version='2021-08-01',
+        authenticator=authenticator
+    )
+    
+    # Set the service URL
     natural_language_understanding.set_service_url(url)
-    response = natural_language_understanding.analyze( text=text+"hello hello hello",features=Features(sentiment=SentimentOptions(targets=[text+"hello hello hello"]))).get_result()
-    label=json.dumps(response, indent=2)
-    label = response['sentiment']['document']['label']
+    
+    # Analyze the sentiment
+    try:
+        response = natural_language_understanding.analyze(
+            text=text,
+            features=Features(sentiment=SentimentOptions(document=True))
+        ).get_result()
+        
+        # Extract the sentiment label
+        label = response['sentiment']['document']['label']
+        return label
+    
+    except Exception as e:
+        # Log the exception (or handle it as per your needs)
+        print(f"Exception: {str(e)}")
+        return None
 
-    return(label)

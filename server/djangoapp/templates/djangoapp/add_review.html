@@ -5,12 +5,117 @@
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
-
+    <title>Add a Review</title>
 </head>
-    <body>
-    <!--Add review form here -->
-    </body>
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <!-- Home Menu Item -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Home</a>
+            </div>
+            <!-- About Us Menu Item -->
+            <div class="nav-item">
+                <a class="nav-link" href="{% url 'djangoapp:about' %}">About Us</a>
+            </div>
+            <!-- Contact Us Menu Item -->
+            <div class="nav-item">
+                <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+            </div>
+            <!-- User Authentication Menu Items -->
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li>
+                    <a class="btn btn-link" href="{% url 'djangoapp:add_review' dealer.id%}">Add Review</a>
+                    <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li>
+                    <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Username" name="username" >
+                            <input type="password" class="form-control" placeholder="Password" name="psw" >
+                            <button class="btn btn-primary" type="submit">Login</button>
+                            <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                        </div>
+                    </form>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid">
+    </br>
+        <h3>Add a review for <b>{{dealer.full_name}}</b></h3>
+        <form action="{% url 'djangoapp:add_review' dealer.id%}" method="post">
+            <div class="form-group">
+    
+                  <div class="mb-3">
+                      <label for="content"><i>Use the space below to write your review.</i></label>
+                      <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
+                  </div>
+    
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
+                      <label class="form-check-label" for="purchasecheck">
+                          Check this box if you purchased a car from {{dealer.full_name}}
+                      </label>
+                  </div>
+                </br>
+                  <div class="mb-3" id="car-select" style="display: none;">
+                    <label for="car"><b>Select Vehicle: </b></label>
+                    <select name="car" id="car" class="form-select">
+                        <option value="" selected>(Model-Make-Year)</option> <!-- Empty option -->
+                        {% for car in cars %}
+                        <option value="{{car.id}}">{{car.name}}-{{car.make.name}}-{{car.year}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                  <div class="mb-3" id="date-select" style="display: none;">
+                      <label for="purchasedate"><b>Purchase Date: </b></label>
+                      <input class="date-own form-control datepicker" style="width: 300px;" type="text" name="purchasedate" id="purchasedate">
+                  </div>
+            </div>
+            {% csrf_token %}
+            <div>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </form>
+    </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#purchasecheck').change(function () {
+            if (this.checked) {
+                $('#car-select').show();
+                $('#date-select').show();
+                $('#car').prop('required', true); // Make the select required
+                $('#purchasedate').prop('required', true); // Make the date field required
+                $('.datepicker').datepicker({
+                    format: 'mm/dd/yyyy',
+                    autoclose: true  // Close the datepicker when a date is selected
+                });
+            } else {
+                $('#car-select').hide();
+                $('#date-select').hide();
+                $('#car').prop('required', false); // Remove the required attribute from the select
+                $('#purchasedate').prop('required', false); // Remove the required attribute from the date field
+                $('.datepicker').datepicker('remove');  // Remove the datepicker when it's not needed
+            }
+        });
+    });
+</script>    
+</body>
 </html>
