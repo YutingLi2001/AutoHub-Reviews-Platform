@@ -1,5 +1,98 @@
-<html>
-    <h1>Contact Us At:  </h1>
-    <p>Email: Autohub@gmail.com</p>
-    <p>Phone: +1 (111)-222-3333</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>AutoHub Reviews - Contact Us</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <!-- Main header -->
+    <header class="text-center py-4 bg-dark text-white">
+        <h1><a href="{% url 'djangoapp:index' %}" class="text-white text-decoration-none">AutoHub Reviews</a></h1>
+    </header>
+
+<!-- Combined Navigation Bar with Bootstrap Styling-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <!-- Navigation Links on the Left -->
+        <div class="navbar-nav">
+            <div class="nav-item nav-box">
+                <a class="nav-link" href="{% url 'djangoapp:about' %}">About Us</a>
+            </div>
+            <div class="nav-item nav-box">
+                <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+            </div>
+        </div>
+        
+        <!-- User Authentication Links on the Right -->
+        <div class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+                <!-- Display user information and logout if authenticated -->
+                <div class="nav-item nav-box">
+                    <a class="nav-link" href="#">{{ user.first_name }} ({{ user.username }})</a>
+                </div>
+                <div class="nav-item nav-box">
+                    <a class="nav-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                </div>
+            {% else %}
+                <!-- Login form for non-authenticated users -->
+                <form class="form-inline my-2 my-lg-0">
+                    {% csrf_token %}
+                    <input class="form-control mr-sm-2" type="text" placeholder="Username" name="username">
+                    <input class="form-control mr-sm-2" type="password" placeholder="Password" name="psw">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+                    <a class="btn btn-outline-primary my-2 my-sm-0" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<style>
+    /* Hover/Click Effect CSS */
+    .nav-box:hover,
+    .nav-box:focus,
+    .nav-box:active {
+        background-color: #f0f0f0; /* Change the background color on hover/click */
+    }
+</style>
+
+    <!-- About content area -->
+    <section class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="about-section p-3">
+                    <div class="services-section p-3">
+                        <h2 class="text-center">Contact Us</h2>
+                        <div class="list-group text-start">
+                            <p class="list-group-item bg-light lead my-3 ps-3">
+                                <span class="font-weight-bold">Company Information:</span><br>
+                                Address: 9999 9th Ave. New York, NY 10001<br>
+                                Phone: (999) 999-9999<br>
+                                Email: AutoHub@gmail.com 
+                            </p>
+                            <p class="list-group-item bg-light lead my-3 ps-3">
+                                <span class="font-weight-bold">Business Hours:</span><br>
+                                Monday - Friday: 9:00 AM - 6:00 PM<br>
+                                Saturday - Sunday: Closed
+                            </p>
+                        </div>
+                    </div>
+                  </div>                
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 bg-dark text-white">
+        <div class="container">
+            © 2023 AutoHub Reviews. All rights reserved.
+        </div>
+    </footer>
+</body>
 </html>
+

@@ -4,8 +4,8 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibmcloudant.cloudant_v1 import CloudantV1
 
 # Constants for configuration
-API_KEY = ''  # TODO: Replace with your actual API key
-SERVICE_URL = ''  # TODO: Replace with your Cloudant service URL
+API_KEY = ''  
+SERVICE_URL = ''  
 DATABASE_NAME = 'reviews'
 
 # Configure the IAM authenticator and Cloudant client as global constants
