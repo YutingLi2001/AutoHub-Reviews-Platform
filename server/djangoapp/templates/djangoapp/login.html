@@ -1,18 +1,25 @@
-<form action="{% url 'djangoapp:login' %}" method="post">
+{% extends 'base.html' %}
+
+{% block title %}AutoHub Reviews - Log In{% endblock %}
+
+{% block content %}
+<form action="{% url 'djangoapp:login' %}" method="post" class="p-4 rounded" style="background-color: #f8f9fa; max-width: 400px; margin: auto; border: 1px solid #A9A9A9;">
     {% csrf_token %}
-        <h1>Login</h1>
-        <hr>
-        <div class="form-group"> <!--Style second div with .form-group class -->
-          <label for="username"><b>User Name</b></label>
-          <input id="username" class = "form-control" type="text" placeholder="Enter User Name: " name="username" required> <!--Style input with .form-control class -->
-          <label for="password"><b>Password</b></label>
-          <input id="password" class = "form-control" type="password"  placeholder="Enter Password: " name="password" required> <!--Style input with .form-control class -->
-        </div>
-        {% if message %}
-          <div class="alert alert-warning"> <!--Style the message paragraph with .alert and .alert-warning class -->
-            {{ message }}
-          </div>
-        {% endif %}
-        <button class="btn btn-primary" type="submit">Login</button> <!--Style button with .btn and .btn-primary class -->
-    
+    <h1 class="text-center mb-4">Login</h1>
+    <hr>
+    <div class="form-group">
+      <label for="username" class="mb-1"><b>User Name</b></label>
+      <input id="username" class="form-control" type="text" placeholder="Enter User Name" name="username" required>
+
+      <label for="password" class="mb-1 mt-3"><b>Password</b></label>
+      <input id="password" class="form-control" type="password" placeholder="Enter Password" name="password" required>
+    </div>
+    {% if message %}
+      <div class="alert alert-warning" role="alert">
+        {{ message }}
+      </div>
+    {% endif %}
+    <button class="btn btn-primary btn-block" type="submit">Login</button>
 </form>
+
+{% endblock %}

@@ -9,26 +9,7 @@
     <!-- Additional head content -->
     {% block additional_head %}
     {% endblock %}
-    <style>
-        /* Custom CSS for navigation link hover effect */
-        .nav-link-custom {
-            border: 1px solid #A9A9A9; 
-            color: #696969; 
-            background-color: transparent; 
-            padding: 0.5rem 1rem; 
-            margin: 0.5rem; /* To give some space around the links */
-            display: inline-block; 
-            text-decoration: none;
-            transition: color 0.2s, background-color 0.2s; /* Smooth transition for hover effect */
-            border-radius: 5px; 
-
-        }
-    
-        .nav-link-custom:hover, .nav-link-custom:focus {
-            color: white !important; 
-            background-color: #A9A9A9 !important;
-        }
-    </style>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -40,43 +21,53 @@
 
 </head>
 <body>
-    <!-- Main header branding for AutoHub Reviews, centered and above the navbar -->
-    <header class="text-center py-4 bg-dark text-white">
-        <h1><a href="{% url 'djangoapp:index' %}" class="text-white text-decoration-none">AutoHub Reviews</a></h1>
-    </header>
-
-    <!-- Combined Navigation Bar with Bootstrap Styling -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Combined Header and Navigation Bar -->
+    <nav class="navbar navbar-dark bg-header">
         <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container">
-                    <!-- Navigation Links on the Left -->
-                    <div class="navbar-nav">
-                        <a class="nav-link nav-link-custom" href="{% url 'djangoapp:about' %}">About Us</a>
-                        <a class="nav-link nav-link-custom" href="{% url 'djangoapp:contact' %}">Contact Us</a>
-                    </div>
-                </div>
-            </nav>
+            <!-- Branding and Home Link -->
+            <a href="{% url 'djangoapp:index' %}" class="navbar-brand brand-text py-3">
+                AutoHub Reviews
+            </a>
+            <!-- Dropdown button for smaller screens -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-            <!-- User Authentication Links on the Right -->
-            <div class="navbar-nav ml-auto">
-                {% if user.is_authenticated %}
-                    <!-- Display user information and logout if authenticated -->
-                    <span class="navbar-text">{{ user.first_name }} ({{ user.username }})</span>
-                    <a class="nav-link" href="{% url 'djangoapp:logout' %}">Logout</a>
-                {% else %}
-                    <!-- Login form for non-authenticated users -->
-                    <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
-                        {% csrf_token %}
-                        <input class="form-control mr-sm-2" type="text" placeholder="Username" name="username">
-                        <input class="form-control mr-sm-2" type="password" placeholder="Password" name="password">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
-                        <a class="btn btn-outline-primary my-2 my-sm-0" href="{% url 'djangoapp:registration' %}">Sign Up</a>
-                    </form>
-                {% endif %}
+            <!-- Navbar content -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <!-- Navigation Links -->
+                <ul class="navbar-nav w-100">
+                    <li class="nav-item">
+                        <a class="nav-link nav-style" href="{% url 'djangoapp:about' %}">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-style" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                    </li>
+                    <!-- Conditional Links Based on Authentication Status -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item ml-auto">
+                            <span class="navbar-text user-info">{{ user.first_name }} ({{ user.username }})</span>
+                            <a class="nav-link nav-style" href="{% url 'djangoapp:logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item ml-auto">
+                            <a class="nav-link nav-style" href="{% url 'djangoapp:login' %}">Login</a>
+                            <a class="nav-link nav-style" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </nav>
+
+    <!-- User messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-warning" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
     {% block content %}
     <!-- Unique page content goes here -->

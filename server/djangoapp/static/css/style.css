@@ -1,0 +1,140 @@
+/* Base background colors */
+.bg-header {
+    background-color: #212529; /* Dark background for header */
+}
+
+.bg-navbar {
+    background-color: #333; /* Slightly lighter dark background for navbar */
+}
+
+/* Header text styled as logo */
+.brand-text {
+    font-size: 1.8rem; /* Large, legible font size */
+    color: #ffffff; /* White text color */
+    font-weight: 700; /* Bold font weight */
+    letter-spacing: 1px; /* Spacing between letters */
+    transition: color 0.3s ease-in-out; /* Transition for hover effect */
+}
+
+.brand-text:hover {
+    color: #9c9c9c; /* Change color slightly on hover */
+}
+
+/* Navbar styles */
+.navbar {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+/* Nav link styles */
+.nav-style {
+    color: #dcdcdc; /* Light grey color for nav links */
+    margin-right: 1rem; /* Spacing between nav links */
+    transition: color 0.2s ease-in-out; /* Smooth transition for hover effect */
+}
+
+.nav-style:hover {
+    color: #ffffff; /* Bright white color on hover */
+}
+
+/* User information style */
+.user-info {
+    color: #dedede; /* Slightly brighter color for user info */
+    margin-right: 1rem; /* Consistent spacing */
+}
+
+/* Responsive adjustments for non-collapsing navbar */
+@media (max-width: 991.98px) {
+    .navbar-nav {
+        flex-direction: row;
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.5rem 0.75rem; /* Adjust padding for better fit on small screens */
+        font-size: 0.9rem; /* Slightly smaller font size */
+    }
+
+    .user-info {
+        display: none; /* Hide the user info text on smaller screens to save space */
+    }
+}
+
+@media (max-width: 767px) {
+    .brand-text {
+        font-size: 1.5rem; /* Smaller font size for mobile devices */
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.5rem 0.5rem; /* Smaller padding */
+    }
+}
+
+/* Navbar toggler customization for a high-tech look */
+.navbar-toggler {
+    border: none; /* Remove default border */
+    background: transparent; /* Transparent background */
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.75)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); /* Custom icon color */
+}
+
+/* Dropdown menu full width */
+.navbar-nav .nav-item {
+    width: 100%;
+}
+
+/* Dropdown items background variation */
+.navbar-nav .nav-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+.navbar-nav .nav-link:hover, .navbar-nav .nav-link:focus {
+    background-color: #2a2e33; /* Slightly lighter than the navbar's background for hover state */
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .navbar-nav .nav-link {
+        padding: 0.5rem 1rem; /* Adequate padding for tap targets on mobile */
+    }
+}
+
+@media (max-width: 767px) {
+    .brand-text {
+        font-size: 1.5rem; /* Smaller font size for mobile devices */
+    }
+}
+
+
+/* Additional custom styles for login form */
+form {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px; /* Slightly rounded corners for the form */
+}
+
+input.form-control {
+    border: 1px solid #A9A9A9; /* Darker grey border for inputs */
+    border-radius: 5px; /* Slightly rounded corners for the inputs */
+    margin-bottom: 15px; /* Spacing after each input */
+}
+
+.btn-primary {
+    border-radius: 5px; /* Slightly rounded corners for the button */
+    padding: 10px; /* Padding for the button */
+    font-size: 16px; /* Slightly larger font size for the button text */
+    border: none; /* Remove default border */
+    background-color: #A9A9A9; /* Darker grey background for the button */
+    transition: background-color 0.2s; /* Smooth transition for hover effect */
+}
+
+.btn-primary:hover {
+    background-color: #696969; /* Darken the button background on hover */
+}
+
+.alert-warning {
+    border-radius: 5px; /* Slightly rounded corners for the alert */
+}

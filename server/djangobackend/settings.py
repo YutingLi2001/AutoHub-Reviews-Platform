@@ -122,6 +122,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # Recommended to rename to avoid confusion with STATICFILES_DIRS
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'djangoapp/static'), # This is where your `style.css` will reside
+]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # It's okay to keep MEDIA_ROOT as it is
 MEDIA_URL = '/media/'
