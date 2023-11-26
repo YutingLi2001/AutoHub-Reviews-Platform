@@ -1,45 +1,45 @@
 /* Base background colors */
 .bg-header {
-    background-color: #212529; /* Dark background for header */
+    background-color: #212529; /* Dark background for the header */
 }
 
 .bg-navbar {
-    background-color: #333; /* Slightly lighter dark background for navbar */
+    background-color: #333; /* Slightly lighter dark background for the navbar */
 }
 
 /* Header text styled as logo */
 .brand-text {
-    font-size: 1.8rem; /* Large, legible font size */
-    color: #ffffff; /* White text color */
-    font-weight: 700; /* Bold font weight */
-    letter-spacing: 1px; /* Spacing between letters */
-    transition: color 0.3s ease-in-out; /* Transition for hover effect */
+    font-size: 1.8rem;
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: color 0.3s ease-in-out;
 }
 
 .brand-text:hover {
-    color: #9c9c9c; /* Change color slightly on hover */
+    color: #9c9c9c;
 }
 
 /* Navbar styles */
 .navbar {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Nav link styles */
 .nav-style {
-    color: #dcdcdc; /* Light grey color for nav links */
-    margin-right: 1rem; /* Spacing between nav links */
-    transition: color 0.2s ease-in-out; /* Smooth transition for hover effect */
+    color: #dcdcdc;
+    margin-right: 1rem;
+    transition: color 0.2s ease-in-out;
 }
 
 .nav-style:hover {
-    color: #ffffff; /* Bright white color on hover */
+    color: #ffffff;
 }
 
 /* User information style */
 .user-info {
-    color: #dedede; /* Slightly brighter color for user info */
-    margin-right: 1rem; /* Consistent spacing */
+    color: #dedede;
+    margin-right: 1rem;
 }
 
 /* Responsive adjustments for non-collapsing navbar */
@@ -50,42 +50,43 @@
         width: 100%;
     }
 
-    .navbar-nav .nav-link {
-        padding: 0.5rem 0.75rem; /* Adjust padding for better fit on small screens */
-        font-size: 0.9rem; /* Slightly smaller font size */
+    .navbar-nav .nav-link,
+    .user-info {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
     }
 
     .user-info {
-        display: none; /* Hide the user info text on smaller screens to save space */
+        display: none;
     }
 }
 
 @media (max-width: 767px) {
-    .brand-text {
-        font-size: 1.5rem; /* Smaller font size for mobile devices */
+    .brand-text,
+    .navbar-nav .nav-link {
+        font-size: 1.5rem;
     }
 
     .navbar-nav .nav-link {
-        padding: 0.5rem 0.5rem; /* Smaller padding */
+        padding: 0.5rem 0.5rem;
     }
 }
 
-/* Navbar toggler customization for a high-tech look */
+/* Navbar toggler customization */
 .navbar-toggler {
-    border: none; /* Remove default border */
-    background: transparent; /* Transparent background */
+    border: none;
+    background: transparent;
 }
 
 .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.75)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); /* Custom icon color */
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.75)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-/* Dropdown menu full width */
+/* Dropdown menu styles */
 .navbar-nav .nav-item {
     width: 100%;
 }
 
-/* Dropdown items background variation */
 .navbar-nav .nav-link {
     display: block;
     width: 100%;
@@ -93,48 +94,37 @@
 }
 
 .navbar-nav .nav-link:hover, .navbar-nav .nav-link:focus {
-    background-color: #2a2e33; /* Slightly lighter than the navbar's background for hover state */
+    background-color: #2a2e33;
 }
 
-/* Responsive adjustments */
-@media (max-width: 991.98px) {
-    .navbar-nav .nav-link {
-        padding: 0.5rem 1rem; /* Adequate padding for tap targets on mobile */
-    }
-}
-
-@media (max-width: 767px) {
-    .brand-text {
-        font-size: 1.5rem; /* Smaller font size for mobile devices */
-    }
-}
-
-
-/* Additional custom styles for login form */
-form {
+/* Additional styles for the login page */
+.card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 5px; /* Slightly rounded corners for the form */
 }
 
-input.form-control {
-    border: 1px solid #A9A9A9; /* Darker grey border for inputs */
-    border-radius: 5px; /* Slightly rounded corners for the inputs */
-    margin-bottom: 15px; /* Spacing after each input */
+.card-header {
+    background-color: #212529;
+}
+
+.card-body {
+    background: #fff;
+}
+
+.form-control {
+    border-radius: 0;
+    margin-bottom: 1rem;
 }
 
 .btn-primary {
-    border-radius: 5px; /* Slightly rounded corners for the button */
-    padding: 10px; /* Padding for the button */
-    font-size: 16px; /* Slightly larger font size for the button text */
-    border: none; /* Remove default border */
-    background-color: #A9A9A9; /* Darker grey background for the button */
-    transition: background-color 0.2s; /* Smooth transition for hover effect */
+    background-color: #007bff;
+    border: none;
 }
 
-.btn-primary:hover {
-    background-color: #696969; /* Darken the button background on hover */
+.btn-link {
+    color: #007bff;
 }
 
 .alert-warning {
-    border-radius: 5px; /* Slightly rounded corners for the alert */
+    background-color: #ffc107;
+    color: #212529;
 }
