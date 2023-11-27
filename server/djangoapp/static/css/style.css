@@ -103,8 +103,9 @@
 }
 
 .card-header {
-    background-color: #212529;
-    text-align: center
+    text-align: center;
+    background: #333 !important;
+    color: #ffffff;
 }
 
 .card-body {
@@ -129,4 +130,4 @@
     background-color: #ffc107;
     color: #212529;
 }
-
+  
