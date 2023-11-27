@@ -1,32 +1,28 @@
 from django.db import models
 from django.utils.timezone import now
-from django.core import serializers
-import uuid
 import json
 
-# Car Make model
+# Model for car make with relevant fields
 class CarMake(models.Model):
-    name = models.CharField(null=False, max_length=100, default='Make')
+    name = models.CharField(max_length=100, default='Make', null=False)
     description = models.CharField(max_length=500)
 
+    # String representation for the CarMake
     def __str__(self):
-        return "Name: " + self.name
+        return f"Name: {self.name}"
 
-# Car Model model
+
+# Model for car model with a relationship to CarMake and other specific fields
 class CarModel(models.Model):
-    make = models.ForeignKey(CarMake, null=False, on_delete=models.CASCADE)
-    # - Many-To-One relationship to Car Make model (One Car Make has many Car Models, using ForeignKey field)
-    name = models.CharField(null=False, max_length=40, default='undefined')
-    # - Name
-    id = models.IntegerField(default=1, primary_key=True)      
-    # - Dealer id, used to refer a dealer created in cloudant database
-    
+    # Constants for car types
     COUPE = 'Coupe'
     MINIVAN = 'Minivan'
     SEDAN = 'Sedan'
     SUV = 'SUV'
     TRUCK = 'Truck'
     WAGON = 'Wagon'
+    
+    # Choices tuple for car types
     CAR_TYPES = [
         (COUPE, 'Coupe'),
         (MINIVAN, 'Minivan'),
@@ -36,55 +32,54 @@ class CarModel(models.Model):
         (WAGON, 'Wagon'),
     ]
 
+    # Foreign key relationship to CarMake
+    make = models.ForeignKey(CarMake, on_delete=models.CASCADE, null=False)
+    name = models.CharField(max_length=40, default='undefined', null=False)
+    id = models.IntegerField(primary_key=True, default=1)  # Dealer id
+    
+    # Car type with choices
     type = models.CharField(
-        null=False,
         max_length=50,
         choices=CAR_TYPES,
-        default=SEDAN
+        default=SEDAN,
+        null=False
     )
-        
+    
+    # Year of the car model, defaulting to current year
     year = models.IntegerField(default=now().year)
 
+    # String representation for the CarModel
     def __str__(self):
-        return "Name: " + self.name
+        return f"Name: {self.name}"
 
-# Get dealer data
+
+# Class representing a car dealer with various attributes
 class CarDealer:
 
     def __init__(self, address, city, id, lat, long, st, zip, full_name):
-        # Dealer name
         self.full_name = full_name
-        
-        # Dealer address
         self.address = address
-        # Dealer city
         self.city = city
-       
-        # Dealer id
         self.id = id
-        # Location lat
         self.lat = lat
-        # Location long
         self.long = long
-
-        # Dealer state
         self.st = st
-        # Dealer zip
         self.zip = zip
 
+    # String representation for the CarDealer
     def __str__(self):
-        return "Dealer Name: " + self.full_name
+        return f"Dealer Name: {self.full_name}"
 
-# Get review data
+
+# Class representing a dealer review with both required and optional attributes
 class DealerReview:
 
     def __init__(self, dealership, name, purchase, review):
-        # Required attributes
         self.dealership = dealership
         self.name = name
         self.purchase = purchase
         self.review = review
-        # Optional attributes
+        # Optional attributes initialized as empty strings
         self.purchase_date = ""
         self.purchase_make = ""
         self.purchase_model = ""
@@ -92,14 +87,17 @@ class DealerReview:
         self.sentiment = ""
         self.id = ""
 
+    # String representation for the DealerReview
     def __str__(self):
-        return "Review: " + self.review
+        return f"Review: {self.review}"
 
+    # Converts the object to JSON
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
-                            sort_keys=True, indent=4)
+                          sort_keys=True, indent=4)
 
-# Post review data
+
+# Class for posting a review, similar to DealerReview, but with different fields for the car
 class ReviewPost:
 
     def __init__(self, dealership, name, purchase, review):
@@ -112,7 +110,7 @@ class ReviewPost:
         self.car_model = ""
         self.car_year = ""
 
+    # Converts the object to JSON
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
-                            sort_keys=True, indent=4)
-                            
+                          sort_keys=True, indent=4)
