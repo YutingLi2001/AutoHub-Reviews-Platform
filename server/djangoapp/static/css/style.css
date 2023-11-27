@@ -104,6 +104,7 @@
 
 .card-header {
     background-color: #212529;
+    text-align: center
 }
 
 .card-body {
@@ -129,24 +130,3 @@
     color: #212529;
 }
 
-/* Ensure h3 title is centered properly */
-h3.text-center {
-    text-align: center;
-}
-
-/* Button styling */
-.btn-primary {
-    float: right; /* Position the button to the right */
-}
-
-/* Card styling for a more rounded appearance */
-.rounded-card {
-    border-radius: 15px; /* Adjust as needed */
-}
-
-/* Clear float */
-.mb-3:after {
-    content: "";
-    display: table;
-    clear: both;
-}

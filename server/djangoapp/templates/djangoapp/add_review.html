@@ -1,51 +1,47 @@
 {% extends 'base.html' %}
-
-{% block title %}AutoHub Reviews - Add a Review for {{dealer.full_name}} {% endblock %}
-
+{% block title %}AutoHub Reviews - Add Review{% endblock %}
 {% block content %}
-    <div class="container-fluid">
-    </br>
-        <h3>Add a review for <b>{{dealer.full_name}}</b></h3>
-        <form action="{% url 'djangoapp:add_review' dealer.id%}" method="post">
-            <div class="form-group">
-    
-                  <div class="mb-3">
-                      <label for="content"><i>Use the space below to write your review.</i></label>
-                      <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
-                  </div>
-    
-                  <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
-                      <label class="form-check-label" for="purchasecheck">
-                          Check this box if you purchased a car from {{dealer.full_name}}
-                      </label>
-                  </div>
-                </br>
-                  <div class="mb-3" id="car-select" style="display: none;">
-                    <label for="car"><b>Select Vehicle: </b></label>
-                    <select name="car" id="car" class="form-select">
-                        <option value="" selected>(Model-Make-Year)</option> <!-- Empty option -->
-                        {% for car in cars %}
-                        <option value="{{car.id}}">{{car.name}}-{{car.make.name}}-{{car.year}}</option>
-                        {% endfor %}
-                    </select>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-header text-white">
+                    Add a Review for {{ dealer.full_name }}
                 </div>
-    
-                  <div class="mb-3" id="date-select" style="display: none;">
-                      <label for="purchasedate"><b>Purchase Date: </b></label>
-                      <input class="date-own form-control datepicker" style="width: 300px;" type="text" name="purchasedate" id="purchasedate">
-                  </div>
+                <div class="card-body">
+                    <form action="{% url 'djangoapp:add_review' dealer.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="content"><i>Use the space below to write your review.</i></label>
+                            <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
+                            <label class="form-check-label" for="purchasecheck">
+                                Check this box if you purchased a car from {{ dealer.full_name }}
+                            </label>
+                        </div>
+
+                        <div class="mb-3" id="car-select" style="display: none;">
+                            <label for="car"><strong>Select Vehicle:</strong></label>
+                            <select name="car" id="car" class="form-select">
+                                <option value="" selected>(Model-Make-Year)</option>
+                                {% for car in cars %}
+                                <option value="{{ car.id }}">{{ car.name }}-{{ car.make.name }}-{{ car.year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="date-select" style="display: none;">
+                            <label for="purchasedate"><strong>Purchase Date:</strong></label>
+                            <input class="date-own form-control datepicker" style="width: 100%;" type="text" name="purchasedate" id="purchasedate">
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </form>
+                </div>
             </div>
-            {% csrf_token %}
-            <div>
-                <button class="btn btn-primary" type="submit">Submit</button>
-            </div>
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-warning" role="alert">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        </form>
+        </div>
     </div>
 {% endblock %}
 
@@ -56,18 +52,18 @@
                 if (this.checked) {
                     $('#car-select').show();
                     $('#date-select').show();
-                    $('#car').prop('required', true); // Make the select required
-                    $('#purchasedate').prop('required', true); // Make the date field required
+                    $('#car').prop('required', true);
+                    $('#purchasedate').prop('required', true);
                     $('.datepicker').datepicker({
                         format: 'mm/dd/yyyy',
-                        autoclose: true  // Close the datepicker when a date is selected
+                        autoclose: true
                     });
                 } else {
                     $('#car-select').hide();
                     $('#date-select').hide();
-                    $('#car').prop('required', false); // Remove the required attribute from the select
-                    $('#purchasedate').prop('required', false); // Remove the required attribute from the date field
-                    $('.datepicker').datepicker('remove');  // Remove the datepicker when it's not needed
+                    $('#car').prop('required', false);
+                    $('#purchasedate').prop('required', false);
+                    $('.datepicker').datepicker('remove');
                 }
             });
         });
