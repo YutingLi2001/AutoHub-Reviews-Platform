@@ -44,29 +44,38 @@ def logout_request(request):
 
 # View to handle sign up request
 def registration_request(request):
-    context = {}
     if request.method == 'GET':
-        return render(request, 'djangoapp/registration.html', context)
+        return render(request, 'djangoapp/registration.html')
+
     if request.method == 'POST':
-        # Check if user exists
+        # Retrieving form data
         username = request.POST['username']
         password = request.POST['password']
+        password2 = request.POST['password2']  # Confirm password field
         first_name = request.POST['firstname']
         last_name = request.POST['lastname']
-        user_exist = False
+
+        # Check if passwords match
+        if password != password2:
+            messages.error(request, "Passwords do not match.")
+            return render(request, 'djangoapp/registration.html')
+
+        # Check if user exists
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists.")
+            return render(request, 'djangoapp/registration.html')
+
+        # Creating a new user
         try:
-            User.objects.get(username=username)
-            user_exist = True
-        except:
-            logger.error("New user")
-        if not user_exist:
-            user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username, 
-                                            password=password)
-            login(request, user)
+            user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name)
+            user.save()
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            messages.success(request, "Registration successful.")
             return redirect("djangoapp:index")
-        else:
-            context['message'] = "User already exists."
-            return render(request, 'djangoapp/registration.html', context)
+        except Exception as e:
+            logger.error(f"Error creating a new user: {e}")
+            messages.error(request, "An error occurred during registration.")
+            return render(request, 'djangoapp/registration.html')
 
 # View to render list of dealerships
 def get_dealerships(request):
