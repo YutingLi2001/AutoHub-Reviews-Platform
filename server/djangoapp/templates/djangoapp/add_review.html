@@ -4,7 +4,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header bg-header text-white">
+                <div class="card-header text-white bg-dark">
                     Add a Review for {{ dealer.full_name }}
                 </div>
                 <div class="card-body">
@@ -34,7 +34,7 @@
 
                         <div class="mb-3" id="date-select" style="display: none;">
                             <label for="purchasedate"><strong>Purchase Date:</strong></label>
-                            <input class="date-own form-control datepicker" style="width: 100%;" type="text" name="purchasedate" id="purchasedate">
+                            <input class="form-control" type="date" name="purchasedate" id="purchasedate">
                         </div>
 
                         <button class="btn btn-primary" type="submit">Submit</button>
@@ -54,18 +54,14 @@
                     $('#date-select').show();
                     $('#car').prop('required', true);
                     $('#purchasedate').prop('required', true);
-                    $('.datepicker').datepicker({
-                        format: 'mm/dd/yyyy',
-                        autoclose: true
-                    });
                 } else {
                     $('#car-select').hide();
                     $('#date-select').hide();
                     $('#car').prop('required', false);
                     $('#purchasedate').prop('required', false);
-                    $('.datepicker').datepicker('remove');
                 }
             });
         });
     </script>  
 {% endblock %}
+
