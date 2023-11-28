@@ -1,49 +1,28 @@
-# Use an official Python runtime as a base image
-FROM python:3.8.2
+    FROM python:3.8.2
 
-# Set environment variables for Django to run in unbuffered mode, recommended for Docker
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+    ENV PYTHONBUFFERED 1
+    ENV PYTHONWRITEBYTECODE 1
 
-# Define environment variables for static and media files
-# These should match the Django settings in settings.py
-ENV APP=/app \
-    STATIC_URL=/static/ \
-    MEDIA_URL=/media/ \
-    # Set STATIC_ROOT to the absolute path where collectstatic will collect static files
-    STATIC_ROOT=/app/staticfiles \
-    # MEDIA_ROOT should be the absolute path where your media files will be stored
-    MEDIA_ROOT=/app/mediafiles
+    RUN apt-get update \
+        && apt-get install -y netcat
 
-# Create the directories for static and media files
-RUN mkdir -p $STATIC_ROOT $MEDIA_ROOT
+    ENV APP=/app
 
-# Install netcat for network utilities
-RUN apt-get update \
-    && apt-get install -y netcat \
-    && apt-get clean
+    # Change the workdir.
+    WORKDIR $APP
 
-# Set the working directory in the container
-WORKDIR $APP
+    # Install the requirements
+    COPY requirements.txt $APP
 
-# Install the Python dependencies
-COPY requirements.txt ./
-RUN pip3 install --no-cache-dir -r requirements.txt
+    RUN pip3 install -r requirements.txt
 
-# Copy the rest of the application files into the container
-COPY . .
+    # Copy the rest of the files
+    COPY . $APP
 
-# Collect static files
-RUN python3 manage.py collectstatic --noinput
+    EXPOSE 8000
 
-# Expose port 8000 to the outside world
-EXPOSE 8000
+    RUN chmod +x ./entrypoint.sh
 
-# Give execution rights on the entrypoint script
-RUN chmod +x /app/entrypoint.sh
+    ENTRYPOINT ["/bin/bash","/app/entrypoint.sh"]
 
-# Define the entrypoint script to start the services
-ENTRYPOINT ["/app/entrypoint.sh"]
-
-# Start Gunicorn with 3 worker processes
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "djangobackend.wsgi:application"]
+    CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "djangobackend.wsgi"]
