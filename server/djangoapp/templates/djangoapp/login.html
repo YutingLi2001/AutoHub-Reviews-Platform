@@ -21,7 +21,6 @@
                 </div>
                 <div class="card-body">
                     <form method="post" action="{% url 'djangoapp:login' %}">
-                        {% csrf_token %}
                         <!-- Form fields for username and password -->
                         <div class="form-group">
                             <label for="username">Username</label>

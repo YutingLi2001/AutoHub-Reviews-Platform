@@ -12,7 +12,6 @@
                </div>
                <div class="card-body">
                    <form method="post" action="{% url 'djangoapp:registration' %}">
-                       {% csrf_token %}
                        <!-- Form fields for user details -->
                        <div class="form-group">
                             <label for="firstname">First Name</label>
