@@ -54,5 +54,5 @@ This project is forked from [IBM Developer Skills Network](https://github.com/ib
 For any queries or support, please contact me at s9ting.li@gmail.com
 
 ## Project Wiki
-For detailed documentation and user guides, please visit our [Project Wiki](https://github.com/yourusername/yourrepository/wiki).
+For detailed documentation and user guides, please visit our [Project Wiki](https://github.com/YutingLi2001/AutoHub-Reviews-Platform/wiki).
 ```
