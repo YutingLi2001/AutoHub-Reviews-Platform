@@ -52,9 +52,9 @@ For detailed deployment instructions, check out our [Containerization and Deploy
 
 ## Features
 AutoHub Reviews offers comprehensive features for users and administrators:
-- **For All Users:** Nationwide dealership database, branch-specific reviews, intuitive search.
+- **For All Users:** Nationwide dealership database, dealership-specific reviews.
 - **For Registered Users:** Personalized accounts, submit reviews.
-- **For Admin Users:** Data insights.
+- **For Admin Users:** Data insights, management over vehicle types.
 - **Technical Architecture:** Robust and scalable backend powered by Django, SQLite, Cloudant NoSQL, IBM Cloud Functions, Docker, and Kubernetes.
 
 ## Contributing
